@@ -6,8 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.model.repository.UsuarioRepository;
 import com.example.demo.dto.post.UsuarioCreateDTO;
+import com.example.demo.dto.get.UsuarioGetDTO;
 import com.example.demo.model.entity.UsuarioEntity;
 import com.example.demo.utils.CpfUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +37,16 @@ public class UsuarioService {
         usuRep.save(usuario);
     }
 
+    @Transactional(readOnly = true)
+    public UsuarioGetDTO pegarAlunoPeloId(Long id) {
+        UsuarioEntity usuario = usuRep.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado"));
+
+        return new UsuarioGetDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getDataNascimento(),
+                usuario.getCriadoEm());
+    }
 
 }
