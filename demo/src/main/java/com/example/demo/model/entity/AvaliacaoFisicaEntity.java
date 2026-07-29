@@ -10,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "avaliacoes_fisicas")
@@ -31,6 +31,6 @@ public class AvaliacaoFisicaEntity {
     private Double altura;
 
     @Column(nullable = false)
-    private LocalDateTime dataAvaliacao;
+    private LocalDate dataAvaliacao;
 
 }

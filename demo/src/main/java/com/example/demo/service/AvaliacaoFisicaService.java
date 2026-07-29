@@ -5,11 +5,14 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.example.demo.dto.post.AvaliacaoFisicaCreateDTO;
+import com.example.demo.dto.get.AvaliacaoFisicaGetDTO;
 import com.example.demo.model.entity.AvaliacaoFisicaEntity;
 import com.example.demo.model.repository.AvaliacaoFisicaRepository;
 import com.example.demo.model.repository.UsuarioRepository;
 import com.example.demo.model.entity.UsuarioEntity;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
@@ -32,12 +35,31 @@ public class AvaliacaoFisicaService {
         AvaliacaoFisicaEntity avaFisica = new AvaliacaoFisicaEntity();
         avaFisica.setPeso(x.getPeso());
         avaFisica.setAltura(x.getAltura());
-        avaFisica.setDataAvaliacao(LocalDateTime.now());
+        avaFisica.setDataAvaliacao(LocalDate.now());
 
         avaFisica = avaFisicaRep.save(avaFisica);
 
         usu.setAvaliacaoFisica(avaFisica);
         usuRep.save(usu);
     }
-    
+
+    @Transactional(readOnly = true)
+    public AvaliacaoFisicaGetDTO buscarAvaliacaoFisica(Long usuarioId) {
+
+        UsuarioEntity usu = usuRep.findById(usuarioId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado"));
+
+        AvaliacaoFisicaEntity avaFisica = usu.getAvaliacaoFisica();
+
+        if(avaFisica == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Avaliacao fisica nao encontrada");
+        }
+
+        return new AvaliacaoFisicaGetDTO(
+            avaFisica.getId(),
+            avaFisica.getPeso(),
+            avaFisica.getAltura(),
+            avaFisica.getDataAvaliacao());
+    }
+
 }
