@@ -18,6 +18,7 @@ import jakarta.validation.constraints.Positive;
 public class AvaliacaoFisicaCreateDTO {
 
     @NotNull
+    @Positive
     private Long usuarioId;
 
     @NotNull
