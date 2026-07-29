@@ -7,4 +7,6 @@ import com.example.demo.model.entity.UsuarioEntity;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
+    boolean existsByCpf(String cpf);
+
 }
