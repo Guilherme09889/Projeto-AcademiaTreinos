@@ -21,12 +21,12 @@ public class ExercicioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long exercicioId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 100)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String musculoAlvo;
 
 }
