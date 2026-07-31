@@ -22,7 +22,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
            a.altura AS altura
     FROM usuarios u
     LEFT JOIN avaliacoes_fisicas a ON u.avaliacao_fisica_id = a.id
-    where u.nome = :nome
+    where u.nome like :nome%
     ORDER BY u.id ASC
     """)
     List<UsuarioNameCpfAvFProjection> findAllNativeProjectionByNome(@Param("nome") String nome);
