@@ -11,10 +11,14 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import com.example.demo.dto.get.UsuarioGetDTO;
 import com.example.demo.dto.post.UsuarioCreateDTO;
 import com.example.demo.service.UsuarioService;
+import java.util.List;
+import com.example.demo.model.Projection.UsuarioNameCpfAvFProjection;
 
 @RestController
 @RequestMapping("/v1/usuarios")
@@ -33,6 +37,11 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public UsuarioGetDTO pegarAlunoPeloId(@PathVariable @Positive Long id) {
         return usuServ.pegarAlunoPeloId(id);
+    }
+
+    @GetMapping("/nome/{nome}")
+    public List<UsuarioNameCpfAvFProjection> listarTodosPorNome(@PathVariable @NotBlank String nome) {
+        return usuServ.listarTodosPorNome(nome);
     }
 
 }

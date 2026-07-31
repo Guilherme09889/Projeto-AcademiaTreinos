@@ -11,6 +11,8 @@ import com.example.demo.model.entity.UsuarioEntity;
 import com.example.demo.utils.CpfUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
+import com.example.demo.model.Projection.UsuarioNameCpfAvFProjection;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +49,18 @@ public class UsuarioService {
                 usuario.getNome(),
                 usuario.getDataNascimento(),
                 usuario.getCriadoEm());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsuarioNameCpfAvFProjection> listarTodosPorNome(String nome) {
+
+        List<UsuarioNameCpfAvFProjection> resultadoConsulta = usuRep.findAllNativeProjectionByNome(nome);
+        
+        if(resultadoConsulta.isEmpty()){
+            throw new RuntimeException("Nenhum usuario encontrado");
+        }
+        return resultadoConsulta;
+
     }
 
 }
