@@ -1,0 +1,50 @@
+erDiagram
+    USUARIO ||--o{ AVALIACAO_FISICA : "possui histórico de"
+    USUARIO ||--o{ TREINO : "monta"
+    TREINO ||--|{ TREINO_EXERCICIO : "contém"
+    EXERCICIO ||--o{ TREINO_EXERCICIO : "aparece em"
+
+    USUARIO {
+        bigint id PK
+        varchar nome
+        char cpf UK
+        char cep
+        date data_nascimento
+        timestamp criado_em
+    }
+
+    AVALIACAO_FISICA {
+        bigint id PK
+        bigint usuario_id FK
+        date data_avaliacao
+        decimal peso_kg
+        smallint altura_cm
+        decimal imc "GERADO: peso/altura²"
+    }
+
+    TREINO {
+        bigint id PK
+        bigint usuario_id FK
+        varchar nome
+        tinyint dia_semana "1=Dom .. 7=Sab, nullable"
+        varchar observacao
+        timestamp criado_em
+    }
+
+    EXERCICIO {
+        bigint id PK
+        varchar nome UK
+        varchar grupo_muscular
+        text descricao
+    }
+
+    TREINO_EXERCICIO {
+        bigint id PK
+        bigint treino_id FK
+        bigint exercicio_id FK
+        smallint ordem
+        tinyint series
+        varchar repeticoes "ex: 8-12"
+        decimal carga_kg
+        smallint descanso_segundos
+    }
