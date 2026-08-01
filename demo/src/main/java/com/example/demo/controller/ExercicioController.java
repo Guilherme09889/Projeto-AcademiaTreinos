@@ -11,10 +11,12 @@ import com.example.demo.service.ExercicioService;
 import com.example.demo.dto.post.ExercicioCreatDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import java.util.List;
 import com.example.demo.model.Projection.ExercicioGetProjection;
+import com.example.demo.model.entity.ExercicioEntity;
 
 @RestController
 @RequestMapping("/v1/exercicios")
@@ -33,6 +35,11 @@ public class ExercicioController {
     @GetMapping
     public List<ExercicioGetProjection> listarTodos() {
         return exerServ.listarTodos();
+    }
+
+    @GetMapping("/musculo-alvo/{musculoAlvo}")
+    public List<ExercicioEntity> listarPorMusculoAlvo(@Valid @PathVariable String musculoAlvo){
+        return exerServ.listarPorMusculoAlvo(musculoAlvo);
     }
 
 }

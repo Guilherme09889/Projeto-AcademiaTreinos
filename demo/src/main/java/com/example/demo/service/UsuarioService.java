@@ -9,6 +9,7 @@ import com.example.demo.dto.post.UsuarioCreateDTO;
 import com.example.demo.dto.get.UsuarioGetDTO;
 import com.example.demo.model.entity.UsuarioEntity;
 import com.example.demo.utils.CpfUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
@@ -48,7 +49,7 @@ public class UsuarioService {
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getDataNascimento(),
-                usuario.getCriadoEm());
+                usuario.getCriadoEm().toLocalDate());
     }
 
     @Transactional(readOnly = true)
@@ -63,4 +64,15 @@ public class UsuarioService {
 
     }
 
+    @Transactional(readOnly = true)
+    public List<UsuarioGetDTO> listarTodosNative(Pageable pageable) {
+        List<UsuarioGetDTO> resultadoConsulta = usuRep.findAllNative(pageable);
+
+        if(resultadoConsulta.isEmpty()){
+            throw new RuntimeException("Nenhum usuario encontrado");
+        }
+        
+        return resultadoConsulta;
+    }
 }
+

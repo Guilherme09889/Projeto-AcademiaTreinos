@@ -15,8 +15,9 @@ import java.time.LocalDateTime;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import com.example.demo.model.entity.AvaliacaoFisicaEntity;
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.example.demo.model.entity.AvaliacaoFisicaEntity;
 
 @Entity
 @Table(name = "usuarios")

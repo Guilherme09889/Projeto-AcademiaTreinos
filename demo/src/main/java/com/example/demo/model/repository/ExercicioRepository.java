@@ -24,6 +24,9 @@ public interface ExercicioRepository extends JpaRepository<ExercicioEntity, Long
     ORDER BY exercicio_id ASC
     """)
 List<ExercicioGetProjection> findAllNativeProjection();
+
+@NativeQuery(value = "SELECT * FROM exercicios WHERE musculo_alvo like :musculoAlvo%")
+List<ExercicioEntity> findByMusculoAlvoNative(@Param("musculoAlvo") String musculoAlvo);
    
 
 }

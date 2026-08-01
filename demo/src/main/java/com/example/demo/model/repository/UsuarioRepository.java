@@ -3,15 +3,30 @@ package com.example.demo.model.repository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.entity.UsuarioEntity;
+import com.example.demo.dto.get.UsuarioGetDTO;
 import com.example.demo.model.Projection.UsuarioNameCpfAvFProjection;
 import org.springframework.data.jpa.repository.NativeQuery;
 import java.util.List;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
     boolean existsByCpf(String cpf);
+
+    @NativeQuery(value = """
+        select u.id,
+        u.nome as nome,
+        u.data_nascimento as dataNascimento,
+        Date(u.criado_em) as criadoEm
+        from usuarios u
+        order by u.id asc
+    """,
+                countQuery = """
+                select count(*) from usuarios
+                """)
+    List<UsuarioGetDTO> findAllNative(Pageable pageable);
 
     @NativeQuery(value = """
     SELECT u.id AS id,

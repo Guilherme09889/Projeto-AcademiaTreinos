@@ -37,4 +37,18 @@ public class ExercicioService {
         return exercicioRepository.findAllNativeProjection();
     }
 
+    @Transactional(readOnly = true)
+    public List<ExercicioEntity> listarPorMusculoAlvo(String musculoAlvo){
+
+        List<ExercicioEntity> resultadoConsulta = exercicioRepository.findByMusculoAlvoNative(musculoAlvo);
+
+        if(resultadoConsulta.isEmpty()){
+            throw new RuntimeException("Nenhum exercicio encontrado");
+        }
+
+        return resultadoConsulta;
+
+        
+    }
+
 }
