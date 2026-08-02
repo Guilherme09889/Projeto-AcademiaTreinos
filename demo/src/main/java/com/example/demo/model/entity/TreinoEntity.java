@@ -11,6 +11,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import java.time.LocalDate;
+import java.util.List;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 
 @Entity
 @Table(name = "treinos")
@@ -18,7 +21,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Treino {
+public class TreinoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,9 @@ public class Treino {
 
     @Column(name = "data_criacao", nullable = false)
     private LocalDate dataCriacao;
+
+    @OneToMany(mappedBy = "treinoId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TreinoExercicioEntity> treinoExercicios;
 
 
 }

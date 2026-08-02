@@ -17,11 +17,11 @@ public interface ExercicioRepository extends JpaRepository<ExercicioEntity, Long
     Optional<ExercicioEntity> findByNomeNative(@Param("nome") String nome);
 
     @NativeQuery(value = """
-    SELECT exercicio_id AS exercicioId,
+    SELECT id AS id,
            nome AS nome,
            musculo_alvo AS musculoAlvo
     FROM exercicios
-    ORDER BY exercicio_id ASC
+    ORDER BY id ASC
     """)
 List<ExercicioGetProjection> findAllNativeProjection();
 
