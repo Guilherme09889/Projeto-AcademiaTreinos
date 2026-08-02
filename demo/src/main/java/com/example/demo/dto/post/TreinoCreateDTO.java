@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.ToString;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -25,5 +27,9 @@ public class TreinoCreateDTO {
     @Size(min = 3, max = 255, message = "A descricao deve ter entre 3 e 255 caracteres")
     @Pattern(regexp = "[\\p{L}\\p{N} .,;:!?'\"()/-]+", message = "A descricao contem caracteres nao permitidos")
     private String descricao;
+
+    @NotNull(message = "O usuario e obrigatorio")
+    @Positive
+    private Long usuarioId;
 
 }

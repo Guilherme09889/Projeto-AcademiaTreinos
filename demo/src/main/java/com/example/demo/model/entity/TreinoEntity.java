@@ -14,6 +14,10 @@ import java.time.LocalDate;
 import java.util.List;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import com.example.demo.model.entity.UsuarioEntity;
 
 @Entity
 @Table(name = "treinos")
@@ -38,6 +42,10 @@ public class TreinoEntity {
 
     @OneToMany(mappedBy = "treinoId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TreinoExercicioEntity> treinoExercicios;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private UsuarioEntity usuario;
 
 
 }

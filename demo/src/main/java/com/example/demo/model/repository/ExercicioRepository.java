@@ -17,16 +17,15 @@ public interface ExercicioRepository extends JpaRepository<ExercicioEntity, Long
     Optional<ExercicioEntity> findByNomeNative(@Param("nome") String nome);
 
     @NativeQuery(value = """
-    SELECT id AS id,
+    SELECT exercicio_id AS id,
            nome AS nome,
            musculo_alvo AS musculoAlvo
     FROM exercicios
-    ORDER BY id ASC
+    ORDER BY exercicio_id ASC
     """)
-List<ExercicioGetProjection> findAllNativeProjection();
+    List<ExercicioGetProjection> findAllNativeProjection();
 
-@NativeQuery(value = "SELECT * FROM exercicios WHERE musculo_alvo like :musculoAlvo%")
-List<ExercicioEntity> findByMusculoAlvoNative(@Param("musculoAlvo") String musculoAlvo);
-   
+    @NativeQuery(value = "SELECT * FROM exercicios WHERE musculo_alvo LIKE CONCAT(:musculoAlvo, '%')")
+    List<ExercicioEntity> findByMusculoAlvoNative(@Param("musculoAlvo") String musculoAlvo);
 
 }

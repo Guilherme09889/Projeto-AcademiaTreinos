@@ -21,6 +21,7 @@ public class ExercicioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "exercicio_id")
     private Long id;
 
     @Column(nullable = false, unique = true, length = 100)
