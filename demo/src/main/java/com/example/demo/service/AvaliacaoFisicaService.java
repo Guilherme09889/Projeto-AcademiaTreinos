@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.demo.dto.post.AvaliacaoFisicaCreateDTO;
 import com.example.demo.dto.get.AvaliacaoFisicaGetDTO;
+import com.example.demo.dto.put.AvaliacaoFisicaPutDTO;
 import com.example.demo.model.entity.AvaliacaoFisicaEntity;
 import com.example.demo.model.repository.AvaliacaoFisicaRepository;
 import com.example.demo.model.repository.UsuarioRepository;
@@ -60,6 +61,43 @@ public class AvaliacaoFisicaService {
             avaFisica.getPeso(),
             avaFisica.getAltura(),
             avaFisica.getDataAvaliacao());
+    }
+
+    @Transactional
+    public void updateAvaliacaoFisica(Long usuarioId, AvaliacaoFisicaPutDTO x) {
+
+        UsuarioEntity usu = usuRep.findById(usuarioId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado"));
+
+        AvaliacaoFisicaEntity avaFisica = usu.getAvaliacaoFisica();
+
+        if(avaFisica == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Avaliacao fisica nao encontrada");
+        }
+
+        avaFisicaRep.updateAvaliacaoFisicaById(
+            avaFisica.getId(),
+            x.peso(),
+            x.altura(),
+            x.dataAvaliacao());
+    }
+
+    @Transactional
+    public void deletarAvaliacaoFisica(Long usuarioId) {
+
+        UsuarioEntity usu = usuRep.findById(usuarioId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado"));
+
+        AvaliacaoFisicaEntity avaFisica = usu.getAvaliacaoFisica();
+
+        if(avaFisica == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Avaliacao fisica nao encontrada");
+        }
+
+        usu.setAvaliacaoFisica(null);  //remove o vinculo com a coluna.
+        usuRep.saveAndFlush(usu);
+
+        avaFisicaRep.deleteById(avaFisica.getId());
     }
 
 }
