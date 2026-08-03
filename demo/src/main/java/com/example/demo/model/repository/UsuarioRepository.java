@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.NativeQuery;
 import java.util.List;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
+import com.example.demo.dto.get.UsuarioTreinosGetDTO;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
@@ -41,4 +42,17 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
     ORDER BY u.id ASC
     """)
     List<UsuarioNameCpfAvFProjection> findAllNativeProjectionByNome(@Param("nome") String nome);
+
+
+    @NativeQuery(value = """
+        select u.nome as nomeUsuario,
+            t.nome as nomeTreino,
+            t.descricao as descricaoTreino,
+            t.data_criacao as dataCriacaoTreino
+        from usuarios u
+        left join treinos t on u.id = t.usuario_id
+        where u.id = :usuarioId
+        order by t.id asc
+        """)
+    List<UsuarioTreinosGetDTO> findAllNativeProjectionByUsuarioId(@Param("usuarioId") Long usuarioId);
 }
