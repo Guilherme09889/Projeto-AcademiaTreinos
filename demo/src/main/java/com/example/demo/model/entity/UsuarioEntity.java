@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

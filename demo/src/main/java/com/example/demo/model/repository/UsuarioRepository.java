@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.entity.UsuarioEntity;
 import com.example.demo.dto.get.UsuarioGetDTO;
 import com.example.demo.model.Projection.UsuarioNameCpfAvFProjection;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.NativeQuery;
 import java.util.List;
+import java.time.LocalDate;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
 import com.example.demo.dto.get.UsuarioTreinosGetDTO;
@@ -55,4 +57,19 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
         order by t.id asc
         """)
     List<UsuarioTreinosGetDTO> findAllNativeProjectionByUsuarioId(@Param("usuarioId") Long usuarioId);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @NativeQuery(value = """
+        update usuarios u
+        set u.nome = :nome,
+            u.cpf = :cpf,
+            u.data_nascimento = :dataNascimento,
+            u.cep = :cep
+        where u.id = :id
+        """)
+    int updateUsuarioById(@Param("id") Long id,
+                          @Param("nome") String nome,
+                          @Param("cpf") String cpf,
+                          @Param("dataNascimento") LocalDate dataNascimento,
+                          @Param("cep") String cep);
 }

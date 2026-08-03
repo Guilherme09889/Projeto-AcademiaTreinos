@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import com.example.demo.dto.get.UsuarioTreinosGetDTO;
 import java.util.List;
+import com.example.demo.dto.get.TreinoGetDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -37,15 +38,15 @@ public class TreinoService {
     }
 
     @Transactional(readOnly = true)
-    public List<UsuarioTreinosGetDTO> getTreinoByUsuarioId(Long usuarioId) {
+    public UsuarioTreinosGetDTO getTreinoByUsuarioId(Long usuarioId) {
 
-        if (!usuarioRepository.existsById(usuarioId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado");
-        }
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado"));
 
-        return usuarioRepository.findAllNativeProjectionByUsuarioId(usuarioId).stream()
-            .filter(t -> t.nomeTreino() != null)
+        List<TreinoGetDTO> treinos = treinoRepository.findByUsuarioIdOrderByIdAsc(usuarioId).stream()
+            .map(t -> new TreinoGetDTO(t.getId(), t.getNome(), t.getDescricao(), t.getDataCriacao()))
             .toList();
-    }
 
+        return new UsuarioTreinosGetDTO(usuario.getNome(), treinos);
+    }
 }

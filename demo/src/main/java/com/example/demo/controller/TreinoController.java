@@ -13,7 +13,6 @@ import jakarta.validation.constraints.Positive;
 import com.example.demo.service.TreinoService;
 import com.example.demo.dto.post.TreinoCreateDTO;
 import com.example.demo.dto.get.UsuarioTreinosGetDTO;
-import java.util.List;
 
 
 @RestController
@@ -30,7 +29,7 @@ public class TreinoController {
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public List<UsuarioTreinosGetDTO> getTreinoByUsuarioId(@PathVariable @Positive Long usuarioId) {
+    public UsuarioTreinosGetDTO getTreinoByUsuarioId(@PathVariable @Positive Long usuarioId) {
         return treiServ.getTreinoByUsuarioId(usuarioId);
     }
 

@@ -5,9 +5,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import com.example.demo.model.repository.UsuarioRepository;
+import com.example.demo.model.repository.TreinoRepository;
+import com.example.demo.model.repository.AvaliacaoFisicaRepository;
 import com.example.demo.dto.post.UsuarioCreateDTO;
 import com.example.demo.dto.get.UsuarioGetDTO;
+import com.example.demo.dto.put.UsuarioPutDTO;
 import com.example.demo.model.entity.UsuarioEntity;
+import com.example.demo.model.entity.TreinoEntity;
+import com.example.demo.model.entity.AvaliacaoFisicaEntity;
 import com.example.demo.utils.CpfUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,6 +25,8 @@ import com.example.demo.model.Projection.UsuarioNameCpfAvFProjection;
 public class UsuarioService {
 
     private final UsuarioRepository usuRep;
+    private final TreinoRepository treinoRep;
+    private final AvaliacaoFisicaRepository avaliacaoRep;
 
     @Transactional
     public void criarAluno(UsuarioCreateDTO x) {
@@ -71,8 +78,44 @@ public class UsuarioService {
         if(resultadoConsulta.isEmpty()){
             throw new RuntimeException("Nenhum usuario encontrado");
         }
-        
+
         return resultadoConsulta;
+    }
+
+    @Transactional
+    public void UpdateUserById(Long id, UsuarioPutDTO x) {
+
+        if (!usuRep.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado");
+        }
+
+        usuRep.updateUsuarioById(
+                id,
+                x.nome(),
+                x.cpf(),
+                x.dataNascimento(),
+                x.cep());
+    }
+
+    @Transactional
+    public void DeletarById(Long id) {
+
+        UsuarioEntity usuario = usuRep.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado"));
+
+        List<TreinoEntity> treinos = treinoRep.findByUsuarioIdOrderByIdAsc(id);
+        if (!treinos.isEmpty()) {
+            treinoRep.deleteAll(treinos);
+        }
+
+        AvaliacaoFisicaEntity avaliacao = usuario.getAvaliacaoFisica();
+        if (avaliacao != null) {
+            usuario.setAvaliacaoFisica(null);  //remove o vinculo com a coluna.
+            usuRep.saveAndFlush(usuario);
+            avaliacaoRep.delete(avaliacao);
+        }
+
+        usuRep.deleteById(id);
     }
 }
 

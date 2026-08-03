@@ -1,11 +1,8 @@
 package com.example.demo.dto.get;
 
-import java.time.LocalDate;
-
+import java.util.List;
 public record UsuarioTreinosGetDTO(
     String nomeUsuario,
-    String nomeTreino,
-    String descricaoTreino,
-    LocalDate dataCriacaoTreino
+    List<TreinoGetDTO> treinos
 ) {
 }

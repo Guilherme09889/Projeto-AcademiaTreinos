@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import jakarta.validation.constraints.Positive;
 import com.example.demo.dto.get.UsuarioGetDTO;
 
 import com.example.demo.dto.post.UsuarioCreateDTO;
+import com.example.demo.dto.put.UsuarioPutDTO;
 import com.example.demo.service.UsuarioService;
 import java.util.List;
 import com.example.demo.model.Projection.UsuarioNameCpfAvFProjection;
@@ -49,6 +52,18 @@ public class UsuarioController {
     @GetMapping("/nome/{nome}")
     public List<UsuarioNameCpfAvFProjection> listarTodosPorNome(@PathVariable @NotBlank String nome) {
         return usuServ.listarTodosPorNome(nome);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void UpdateUserById(@PathVariable @Positive Long id, @Valid @RequestBody UsuarioPutDTO x) {
+        usuServ.UpdateUserById(id, x);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void DeletarById(@PathVariable @Positive Long id) {
+        usuServ.DeletarById(id);
     }
 
 }
