@@ -61,10 +61,10 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @NativeQuery(value = """
         update usuarios u
-        set u.nome = :nome,
-            u.cpf = :cpf,
-            u.data_nascimento = :dataNascimento,
-            u.cep = :cep
+        set u.nome = coalesce(:nome, u.nome),
+            u.cpf = coalesce(:cpf, u.cpf),
+            u.data_nascimento = coalesce(:dataNascimento, u.data_nascimento),
+            u.cep = coalesce(:cep, u.cep)
         where u.id = :id
         """)
     int updateUsuarioById(@Param("id") Long id,
