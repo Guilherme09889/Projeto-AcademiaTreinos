@@ -14,9 +14,9 @@ public interface AvaliacaoFisicaRepository extends JpaRepository<AvaliacaoFisica
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @NativeQuery(value = """
         update avaliacoes_fisicas a
-        set a.peso = :peso,
-            a.altura = :altura,
-            a.data_avaliacao = :dataAvaliacao
+        set a.peso = coalesce(:peso, a.peso),
+            a.altura = coalesce(:altura, a.altura),
+            a.data_avaliacao = coalesce(:dataAvaliacao, a.data_avaliacao)
         where a.id = :id
         """)
     int updateAvaliacaoFisicaById(@Param("id") Long id,

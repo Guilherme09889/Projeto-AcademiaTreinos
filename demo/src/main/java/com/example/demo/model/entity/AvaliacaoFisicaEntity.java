@@ -25,6 +25,7 @@ public class AvaliacaoFisicaEntity {
     private Long id;
 
     @Column(nullable = false)
+    
     private Double peso;
 
     @Column(nullable = false)
