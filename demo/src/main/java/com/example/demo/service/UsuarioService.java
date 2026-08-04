@@ -111,10 +111,10 @@ public class UsuarioService {
 
         usuRep.updateUsuarioById(
                 id,
-                x.nome(),
-                x.cpf(),
-                x.dataNascimento(),
-                x.cep());
+                nome,
+                cpf,
+                dataNascimento,
+                cep);
     }
 
     @Transactional
