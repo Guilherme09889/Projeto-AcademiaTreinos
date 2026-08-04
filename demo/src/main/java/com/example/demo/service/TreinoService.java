@@ -6,6 +6,7 @@ import com.example.demo.model.repository.TreinoRepository;
 import com.example.demo.model.repository.UsuarioRepository;
 import com.example.demo.dto.post.TreinoCreateDTO;
 import com.example.demo.model.entity.TreinoEntity;
+import com.example.demo.model.entity.TreinoExercicioEntity;
 import com.example.demo.model.entity.UsuarioEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
@@ -48,5 +49,20 @@ public class TreinoService {
             .toList();
 
         return new UsuarioTreinosGetDTO(usuario.getNome(), treinos);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+
+        TreinoEntity treino = treinoRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Treino nao encontrado"));
+
+        List<TreinoExercicioEntity> treinoExercicios = treino.getTreinoExercicios();
+        if (treinoExercicios != null && !treinoExercicios.isEmpty()) {
+            treinoExercicios.clear();   //remove o vinculo, o orphanRemoval apaga os treino_exercicios.
+            treinoRepository.saveAndFlush(treino);
+        }
+
+        treinoRepository.delete(treino);
     }
 }

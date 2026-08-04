@@ -5,10 +5,13 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.model.repository.ExercicioRepository;
 import com.example.demo.dto.post.ExercicioCreatDTO;
+import com.example.demo.dto.put.ExercicioPutDTO;
 import com.example.demo.model.entity.ExercicioEntity;
 import java.util.Optional;
 import java.util.List;
 import com.example.demo.model.Projection.ExercicioGetProjection;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +51,28 @@ public class ExercicioService {
 
         return resultadoConsulta;
 
-        
+
+    }
+
+    @Transactional
+    public void updateById(Long id, ExercicioPutDTO exerPutDTO){
+
+        if(!exercicioRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Exercicio nao encontrado");
+        }
+
+        String nome = exerPutDTO.nome() == null ? null : exerPutDTO.nome().trim();
+        String musculoAlvo = exerPutDTO.musculoAlvo() == null ? null : exerPutDTO.musculoAlvo().trim();
+
+        if(nome != null){
+            exercicioRepository.findByNomeNative(nome)
+                .filter(existente -> !existente.getId().equals(id))
+                .ifPresent(existente -> {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Exercicio ja cadastrado com este nome");
+                });
+        }
+
+        exercicioRepository.updateExercicioById(id, nome, musculoAlvo);
     }
 
 }

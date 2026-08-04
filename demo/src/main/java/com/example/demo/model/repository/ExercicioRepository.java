@@ -2,6 +2,7 @@ package com.example.demo.model.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.query.Param;
 
@@ -27,5 +28,16 @@ public interface ExercicioRepository extends JpaRepository<ExercicioEntity, Long
 
     @NativeQuery(value = "SELECT * FROM exercicios WHERE musculo_alvo LIKE CONCAT(:musculoAlvo, '%')")
     List<ExercicioEntity> findByMusculoAlvoNative(@Param("musculoAlvo") String musculoAlvo);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @NativeQuery(value = """
+        update exercicios e
+        set e.nome = coalesce(:nome, e.nome),
+            e.musculo_alvo = coalesce(:musculoAlvo, e.musculo_alvo)
+        where e.exercicio_id = :id
+        """)
+    int updateExercicioById(@Param("id") Long id,
+                            @Param("nome") String nome,
+                            @Param("musculoAlvo") String musculoAlvo);
 
 }
