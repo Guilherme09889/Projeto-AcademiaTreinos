@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import com.example.demo.model.Projection.UsuarioNameCpfAvFProjection;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +88,25 @@ public class UsuarioService {
 
         if (!usuRep.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario nao encontrado");
+        }
+
+        String nome = x.nome() == null ? null : x.nome().trim();
+        String cpf = x.cpf() == null ? null : x.cpf().trim();
+        LocalDate dataNascimento = x.dataNascimento() == null ? null : x.dataNascimento();
+        String cep = x.cep() == null ? null : x.cep().trim();
+
+        if (cpf != null) {
+            UsuarioEntity usuario = usuRep.findById(id)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Usuario nao encontrado"));
+        
+            boolean cpfMudou = !usuario.getCpf().equals(cpf);
+            boolean cpfJaExiste = usuRep.existsByCpf(cpf);
+        
+            if (cpfMudou && cpfJaExiste) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, "Usuario com este CPF ja existe");
+            }
         }
 
         usuRep.updateUsuarioById(
