@@ -12,7 +12,9 @@ import com.example.demo.model.entity.ExercicioEntity;
 import com.example.demo.model.entity.TreinoExercicioEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
+import com.example.demo.dto.get.TreinoExercicioGetDTO;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +41,15 @@ public class TreinoExercicioService {
         treinoExer.setCarga(treinoExerCreateDTO.getCarga());
 
         treinoExercicioRepository.save(treinoExer);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TreinoExercicioGetDTO> listarAllNative() {
+        List<TreinoExercicioGetDTO> treinoExer = treinoExercicioRepository.ListarAllNative();
+        if (treinoExer.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TreinoExercicio nao encontrado");
+        }
+        return treinoExer;
     }
 
 }

@@ -40,11 +40,12 @@ public class ExercicioController {
     public List<ExercicioGetProjection> listarTodos() {
         return exerServ.listarTodos();
     }
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/musculo-alvo/{musculoAlvo}")
     public List<ExercicioEntity> listarPorMusculoAlvo(@Valid @PathVariable String musculoAlvo){
         return exerServ.listarPorMusculoAlvo(musculoAlvo);
     }
+
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

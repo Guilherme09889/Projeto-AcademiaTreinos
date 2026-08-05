@@ -17,7 +17,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import com.example.demo.model.entity.UsuarioEntity;
 
 @Entity
 @Table(name = "treinos")

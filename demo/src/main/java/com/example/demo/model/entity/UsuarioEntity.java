@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.example.demo.model.entity.AvaliacaoFisicaEntity;
+
 
 @Entity
 @Table(name = "usuarios")
