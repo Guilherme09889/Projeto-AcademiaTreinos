@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.model.repository.ExercicioRepository;
+import com.example.demo.model.repository.TreinoExercicioRepository;
 import com.example.demo.dto.post.ExercicioCreatDTO;
 import com.example.demo.dto.put.ExercicioPutDTO;
 import com.example.demo.model.entity.ExercicioEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class ExercicioService {
 
     private final ExercicioRepository exercicioRepository;
+    private final TreinoExercicioRepository treinoExercicioRepository;
 
     @Transactional
     public void criarExercicio(ExercicioCreatDTO exerCreateDTO){
@@ -73,6 +75,20 @@ public class ExercicioService {
         }
 
         exercicioRepository.updateExercicioById(id, nome, musculoAlvo);
+    }
+
+    @Transactional
+    public void deletarById(Long id){
+
+        ExercicioEntity exercicio = exercicioRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Exercicio nao encontrado"));
+
+        if(treinoExercicioRepository.existsByExercicioId_Id(id)){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                "Exercicio vinculado a um ou mais treinos, remova-o dos treinos antes de deletar");
+        }
+
+        exercicioRepository.delete(exercicio);
     }
 
 }

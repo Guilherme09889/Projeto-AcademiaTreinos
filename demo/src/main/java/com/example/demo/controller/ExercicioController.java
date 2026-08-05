@@ -12,6 +12,7 @@ import com.example.demo.dto.post.ExercicioCreatDTO;
 import com.example.demo.dto.put.ExercicioPutDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +50,12 @@ public class ExercicioController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateById(@PathVariable @Positive Long id, @Valid @RequestBody ExercicioPutDTO exerPutDTO){
         exerServ.updateById(id, exerPutDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarById(@PathVariable @Positive Long id){
+        exerServ.deletarById(id);
     }
 
 }
